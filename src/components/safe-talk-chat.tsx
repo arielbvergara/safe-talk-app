@@ -8,7 +8,6 @@ import { Card, CardContent, CardHeader, CardFooter } from "@/components/ui/card"
 import { Send, AlertTriangle } from 'lucide-react'
 import { MoreVertical, LogIn, LogOut, HelpCircle } from 'lucide-react'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import Image from "next/image"
 
 export function SafeTalkChat() {
   const [messages, setMessages] = useState([
@@ -35,14 +34,14 @@ export function SafeTalkChat() {
     <Card className="mx-auto flex h-[600px] w-full max-w-md flex-col">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 border-b pb-4">
         <div className="flex items-center space-x-2">
-          <div className="relative h-8 w-8">
-            {/* <Image
+          {/* <div className="relative h-8 w-8">
+            <Image
               src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Screenshot%202024-11-07%20at%2013.23.32-Mo9nKHrCxo8zslp4Rn3XJGehAR2pyA.png"
               alt="SafeTalk Logo"
               fill
               className="object-contain"
-            /> */}
-          </div>
+            />
+          </div> */}
           <h2 className="text-2xl font-bold text-gray-700">SafeTalk</h2>
         </div>
         <div className="flex items-center space-x-2">

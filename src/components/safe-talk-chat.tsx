@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { Key, useState } from 'react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
@@ -9,10 +9,29 @@ import { Send, AlertTriangle } from 'lucide-react'
 import { MoreVertical, LogIn, LogOut, HelpCircle } from 'lucide-react'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 
+type MessageStructure = {
+  id: Number,
+  role: String,
+  content: {
+    type: String,
+    text: String
+  }
+} 
+
+const CreateMessageStructure = (id: Number, message: String, isUser: Boolean): MessageStructure => {
+  return {
+    id: id,
+    role: isUser ? "user" : "system",
+    content: {
+      type: "text",
+      text: message
+    }
+  }
+}
 
 export default function SafeTalkChat() {
   const [messages, setMessages] = useState([
-    { id: 1, text: "Hello! How are you feeling today?", sender: "ai" },
+    CreateMessageStructure(1, "Hello! How are you feeling today?", false)
   ])
   const [inputMessage, setInputMessage] = useState("")
   const [isLoggedIn, setIsLoggedIn] = useState(false)
@@ -21,32 +40,30 @@ export default function SafeTalkChat() {
   const handleSend = async () => {
     if (inputMessage.trim() !== "") {
       const userMessage = inputMessage.trim()
-      setMessages(prev => [...prev, { id: prev.length + 1, text: userMessage, sender: "user" }])
+      const newMessage =  CreateMessageStructure(messages.length + 1, userMessage, true)
+      setMessages(prev => [...prev, newMessage])
       setInputMessage("")
       setIsLoading(true)
-
+      
       try {
         const response = await fetch('/api/openai', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ prompt: userMessage }),
+          body: JSON.stringify({ prompt: [...messages, newMessage]}),
         });
-
-        console.log("RES", response)
 
         if (!response.ok) {
           throw new Error('Failed to get AI response')
         }
 
         const data = await response.json()
-        console.log("data", data)
-        console.log("data", data.message.choices[0].message.content)
-        setMessages(prev => [...prev, { id: prev.length + 1, text: data.message.choices[0].message.content, sender: "ai" }])
+        
+        setMessages(prev => [...prev, CreateMessageStructure(prev.length + 1, data.message.choices[0].message.content, false)])
       } catch (error) {
-        console.error('Error:', error)
-        setMessages(prev => [...prev, { id: prev.length + 1, text: "Sorry, I couldn't process your request. Please try again.", sender: "ai" }])
+        console.log(error)
+        setMessages(prev => [...prev, CreateMessageStructure(prev.length + 1, "Sorry, I couldn't process your request. Please try again.", false)])
       } finally {
         setIsLoading(false)
       }
@@ -100,15 +117,15 @@ export default function SafeTalkChat() {
           <ScrollArea className="h-full">
             {messages.map((message) => (
               <div
-                key={message.id}
-                className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'} mb-4`}
+                key={message.id as Key}
+                className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'} mb-4`}
               >
                 <div
                   className={`rounded-lg p-2 max-w-[80%] ${
-                    message.sender === 'user' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-800'
+                    message.role === 'user' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-800'
                   }`}
                 >
-                  {message.text}
+                  {message.content.text}
                 </div>
               </div>
             ))}

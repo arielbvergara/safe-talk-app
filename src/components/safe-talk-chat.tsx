@@ -31,7 +31,7 @@ const CreateMessageStructure = (id: Number, message: String, isUser: Boolean): M
 
 export default function SafeTalkChat() {
   const [messages, setMessages] = useState([
-    CreateMessageStructure(1, "Hello! How are you feeling today?", false)
+    CreateMessageStructure(1, "Hola! Cómo te sientes hoy?", false)
   ])
   const [inputMessage, setInputMessage] = useState("")
   const [isLoggedIn, setIsLoggedIn] = useState(false)
@@ -56,7 +56,7 @@ export default function SafeTalkChat() {
         });
 
         if (!response.ok) {
-          throw new Error('Failed to get AI response')
+          throw new Error('Perdon. Hubo un error al procesar tu mensaje! Puedes volver a intentar?¡Ups! Hubo un problema al procesar tu mensaje. ¿Te gustaría intentarlo de nuevo?')
         }
 
         const data = await response.json()
@@ -64,7 +64,7 @@ export default function SafeTalkChat() {
         setMessages(prev => [...prev, CreateMessageStructure(prev.length + 1, data.message.choices[0].message.content, false)])
       } catch (error) {
         console.log(error)
-        setMessages(prev => [...prev, CreateMessageStructure(prev.length + 1, "Sorry, I couldn't process your request. Please try again.", false)])
+        setMessages(prev => [...prev, CreateMessageStructure(prev.length + 1, "¡Ups! Hubo un problema al procesar tu mensaje. ¿Te gustaría intentarlo de nuevo?", false)])
       } finally {
         setIsLoading(false)
         setShowQuickEmotionsMessages(false)
@@ -72,7 +72,7 @@ export default function SafeTalkChat() {
     }
   }
 
-  const quickEmotions = ["Happy", "Sad", "Angry", "Confused", "Worried"]
+  const quickEmotions = ["Feliz", "Triste", "Enojado", "Confundido", "Preocupado"]
 
   return (
     <Card className="flex h-screen w-screen flex-col">
@@ -85,7 +85,7 @@ export default function SafeTalkChat() {
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="icon">
                 <MoreVertical className="h-5 w-5" />
-                <span className="sr-only">More options</span>
+                <span className="sr-only">Más opciones</span>
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-56">
@@ -93,22 +93,22 @@ export default function SafeTalkChat() {
                 {isLoggedIn ? (
                   <>
                     <LogOut className="mr-2 h-4 w-4" />
-                    <span>Log out</span>
+                    <span>Cerrar sesión</span>
                   </>
                 ) : (
                   <>
                     <LogIn className="mr-2 h-4 w-4" />
-                    <span>Log in</span>
+                    <span>Iniciar sesión</span>
                   </>
                 )}
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <HelpCircle className="mr-2 h-4 w-4" />
-                <span>Helpful Links</span>
+                <span>Enlaces útiles</span>
               </DropdownMenuItem>
               <DropdownMenuItem className="font-semibold text-red-600">
                 <AlertTriangle className="mr-2 h-4 w-4" />
-                <span>Panic Alarm</span>
+                <span>Alarma de pánico</span>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -150,7 +150,7 @@ export default function SafeTalkChat() {
                   key={emotion}
                   variant="outline"
                   size="sm"
-                  onClick={() => setInputMessage(`I'm feeling ${emotion.toLowerCase()}`)}
+                  onClick={() => setInputMessage(`Me siento ${emotion.toLowerCase()}`)}
                 >
                   {emotion}
                 </Button>
@@ -161,7 +161,7 @@ export default function SafeTalkChat() {
       
       <CardFooter className="space-x-2 p-4">
         <Input
-          placeholder="Type your message here..."
+          placeholder="Escribe tu mensaje aquí..."
           value={inputMessage}
           onChange={(e) => setInputMessage(e.target.value)}
           onKeyPress={(e) => e.key === 'Enter' && handleSend()}

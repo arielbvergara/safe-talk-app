@@ -36,6 +36,7 @@ export default function SafeTalkChat() {
   const [inputMessage, setInputMessage] = useState("")
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [showQuickEmotionsMessages, setShowQuickEmotionsMessages] = useState(true)
 
   const handleSend = async () => {
     if (inputMessage.trim() !== "") {
@@ -66,6 +67,7 @@ export default function SafeTalkChat() {
         setMessages(prev => [...prev, CreateMessageStructure(prev.length + 1, "Sorry, I couldn't process your request. Please try again.", false)])
       } finally {
         setIsLoading(false)
+        setShowQuickEmotionsMessages(false)
       }
     }
   }
@@ -112,7 +114,7 @@ export default function SafeTalkChat() {
           </DropdownMenu>
         </div>
       </CardHeader>
-      <CardContent className="message-section flex-grow overflow-hidden p-4">
+      <CardContent className="message-section flex-grow overflow-hidden border-b p-4">
         <div className="min-h-0 flex-grow">
           <ScrollArea className="h-full">
             {messages.map((message) => (
@@ -139,20 +141,24 @@ export default function SafeTalkChat() {
           </ScrollArea>
         </div>
       </CardContent>
-      <div className="border-t p-4">
-        <div className="mb-2 flex flex-wrap gap-2">
-          {quickEmotions.map((emotion) => (
-            <Button
-              key={emotion}
-              variant="outline"
-              size="sm"
-              onClick={() => setInputMessage(`I'm feeling ${emotion.toLowerCase()}`)}
-            >
-              {emotion}
-            </Button>
-          ))}
-        </div>
-      </div>
+      {
+        showQuickEmotionsMessages &&
+          <div className="p-4">
+            <div className="mb-2 flex flex-wrap gap-2">
+              {quickEmotions.map((emotion) => (
+                <Button
+                  key={emotion}
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setInputMessage(`I'm feeling ${emotion.toLowerCase()}`)}
+                >
+                  {emotion}
+                </Button>
+              ))}
+            </div>
+          </div>
+      }
+      
       <CardFooter className="space-x-2 p-4">
         <Input
           placeholder="Type your message here..."

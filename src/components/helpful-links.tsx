@@ -3,6 +3,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Book, HeartPulse, Phone, Users } from "lucide-react"
+import SafeTalkHeader from "./header"
 
 const links = [
   {
@@ -33,12 +34,9 @@ const links = [
 
 export function HelpfulLinksComponent() {
   return (
-    <Card className="w-full max-w-md mx-auto bg-background">
-      <CardHeader className="bg-muted">
-        <CardTitle className="text-2xl font-bold text-primary">Enlaces Útiles</CardTitle>
-        <CardDescription>Recursos para apoyarte en tu camino</CardDescription>
-      </CardHeader>
-      <ScrollArea className="h-[400px]">
+    <Card className="mx-auto h-screen w-full max-w-md bg-background">
+      <SafeTalkHeader />
+      <ScrollArea >
         <CardContent className="p-6">
           <div className="grid gap-6">
             {links.map((link, index) => (
@@ -47,13 +45,13 @@ export function HelpfulLinksComponent() {
                 href={link.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center p-4 rounded-lg bg-secondary hover:bg-secondary/80 transition-colors"
+                className="flex items-center rounded-lg bg-secondary p-4 transition-colors hover:bg-secondary/80"
               >
                 <div className="mr-4 rounded-full bg-primary p-2 text-primary-foreground">
                   {link.icon}
                 </div>
                 <div>
-                  <h3 className="font-semibold text-lg">{link.title}</h3>
+                  <h3 className="text-lg font-semibold">{link.title}</h3>
                   <p className="text-sm text-muted-foreground">{link.description}</p>
                 </div>
               </a>

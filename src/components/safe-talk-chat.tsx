@@ -4,12 +4,9 @@ import React, { Key, useState } from 'react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { Card, CardContent, CardHeader, CardFooter } from "@/components/ui/card"
-import { Send, AlertTriangle } from 'lucide-react'
-import { MoreVertical, LogIn, LogOut, HelpCircle } from 'lucide-react'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import Link from 'next/link'
-import { useRef } from 'react';
+import { Card, CardContent, CardFooter } from "@/components/ui/card"
+import { Send } from 'lucide-react'
+import SafeTalkHeader from './header'
 
 type MessageStructure = {
   id: Number,
@@ -32,18 +29,13 @@ const CreateMessageStructure = (id: Number, message: String, isUser: Boolean): M
 }
 
 export default function SafeTalkChat() {
-  const inputRef = useRef<HTMLInputElement>(null);
+  
   const [messages, setMessages] = useState([
     CreateMessageStructure(1, "Hola! Cómo te sientes hoy?", false)
   ])
   const [inputMessage, setInputMessage] = useState("")
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [showQuickEmotionsMessages, setShowQuickEmotionsMessages] = useState(true)
-
-  const handleFocus = () => {
-    inputRef.current?.focus();
-  };
 
   const handleSend = async () => {
     if (inputMessage.trim() !== "") {
@@ -83,48 +75,7 @@ export default function SafeTalkChat() {
 
   return (
     <Card className="flex h-screen w-screen flex-col">
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 border-b p-4">
-        <div className="flex items-center space-x-2">
-          <Link href={"/"}>
-            <h2 className="text-2xl font-bold text-gray-700">SafeTalk</h2>
-          </Link>
-        </div>
-        <div className="flex items-center space-x-2">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon">
-                <MoreVertical className="h-5 w-5" />
-                <span className="sr-only">Más opciones</span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56">
-              <DropdownMenuItem onClick={() => setIsLoggedIn(!isLoggedIn)}>
-                {isLoggedIn ? (
-                  <>
-                    <LogOut className="mr-2 h-4 w-4" />
-                    <span>Cerrar sesión</span>
-                  </>
-                ) : (
-                  <>
-                    <LogIn className="mr-2 h-4 w-4" />
-                    <span>Iniciar sesión</span>
-                  </>
-                )}
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Link href={"/ayuda"} className='flex'>
-                  <HelpCircle className="mr-2 h-4 w-4" />
-                  <span>Enlaces útiles</span>
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem className="font-semibold text-red-600">
-                <AlertTriangle className="mr-2 h-4 w-4" />
-                <span>Alarma de pánico</span>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-      </CardHeader>
+      <SafeTalkHeader />
       <CardContent className="message-section flex-grow overflow-hidden border-b p-4">
         <div className="min-h-0 flex-grow">
           <ScrollArea className="h-full">
@@ -162,7 +113,6 @@ export default function SafeTalkChat() {
                   variant="outline"
                   size="sm"
                   onClick={() => {
-                    handleFocus()
                     setInputMessage(`Me siento ${emotion.toLowerCase()}`)
                   }}
                 >
@@ -173,7 +123,7 @@ export default function SafeTalkChat() {
           </div>
       }
       
-      <CardFooter className="space-x-2 p-4" ref={inputRef}>
+      <CardFooter className="space-x-2 p-4">
         <Input
           placeholder="Escribe tu mensaje aquí..."
           value={inputMessage}

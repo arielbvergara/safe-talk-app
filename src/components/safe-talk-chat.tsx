@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardFooter } from "@/components/ui/card"
 import { Send, AlertTriangle } from 'lucide-react'
 import { MoreVertical, LogIn, LogOut, HelpCircle } from 'lucide-react'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import Link from 'next/link'
 
 type MessageStructure = {
   id: Number,
@@ -78,7 +79,9 @@ export default function SafeTalkChat() {
     <Card className="flex h-screen w-screen flex-col">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 border-b p-4">
         <div className="flex items-center space-x-2">
-          <h2 className="text-2xl font-bold text-gray-700">SafeTalk</h2>
+          <Link href={"/"}>
+            <h2 className="text-2xl font-bold text-gray-700">SafeTalk</h2>
+          </Link>
         </div>
         <div className="flex items-center space-x-2">
           <DropdownMenu>

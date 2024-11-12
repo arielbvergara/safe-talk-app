@@ -106,8 +106,10 @@ export default function SafeTalkChat() {
                 )}
               </DropdownMenuItem>
               <DropdownMenuItem>
-                <HelpCircle className="mr-2 h-4 w-4" />
-                <span>Enlaces útiles</span>
+                <Link href={"/ayuda"} className='flex'>
+                  <HelpCircle className="mr-2 h-4 w-4" />
+                  <span>Enlaces útiles</span>
+                </Link>
               </DropdownMenuItem>
               <DropdownMenuItem className="font-semibold text-red-600">
                 <AlertTriangle className="mr-2 h-4 w-4" />

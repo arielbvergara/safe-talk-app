@@ -9,6 +9,7 @@ import { Send, AlertTriangle } from 'lucide-react'
 import { MoreVertical, LogIn, LogOut, HelpCircle } from 'lucide-react'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import Link from 'next/link'
+import { useRef } from 'react';
 
 type MessageStructure = {
   id: Number,
@@ -31,6 +32,7 @@ const CreateMessageStructure = (id: Number, message: String, isUser: Boolean): M
 }
 
 export default function SafeTalkChat() {
+  const inputRef = useRef<HTMLInputElement>(null);
   const [messages, setMessages] = useState([
     CreateMessageStructure(1, "Hola! Cómo te sientes hoy?", false)
   ])
@@ -38,6 +40,10 @@ export default function SafeTalkChat() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [showQuickEmotionsMessages, setShowQuickEmotionsMessages] = useState(true)
+
+  const handleFocus = () => {
+    inputRef.current?.focus();
+  };
 
   const handleSend = async () => {
     if (inputMessage.trim() !== "") {
@@ -155,7 +161,10 @@ export default function SafeTalkChat() {
                   key={emotion}
                   variant="outline"
                   size="sm"
-                  onClick={() => setInputMessage(`Me siento ${emotion.toLowerCase()}`)}
+                  onClick={() => {
+                    handleFocus()
+                    setInputMessage(`Me siento ${emotion.toLowerCase()}`)
+                  }}
                 >
                   {emotion}
                 </Button>
@@ -164,7 +173,7 @@ export default function SafeTalkChat() {
           </div>
       }
       
-      <CardFooter className="space-x-2 p-4">
+      <CardFooter className="space-x-2 p-4" ref={inputRef}>
         <Input
           placeholder="Escribe tu mensaje aquí..."
           value={inputMessage}

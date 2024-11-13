@@ -36,7 +36,7 @@ export default function SafeTalkHeader() {
               <DropdownMenuItem>
                 <Link href={"/chat"} className='flex'>
                   <MessageCircleMore className="mr-2 h-4 w-4" />
-                  <span>Chat with us</span>
+                  <span>Espacio para expresarme</span>
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem>
